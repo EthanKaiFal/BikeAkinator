@@ -12,6 +12,71 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
+
+  Bike: a
+    .model({
+      bikeNumber: a.integer(),
+      brand: a.string(),
+      model: a.string(),
+      year: a.integer(),
+      sold: a.boolean(),
+      broken: a.boolean(),
+      ownershipMonths: a.integer(),
+      score: a.float(),
+      userId: a.id(),
+      owner: a.belongsTo("User","userId")
+    }),
+  User: a
+    .model({
+      userIdAMP: a.string(),
+      bikesOwned: a.hasMany("Bike", "userId"),
+    }),
+
+  BrandStats: a
+    .model({
+      brandName: a.string(),
+      avgSatisScore: a.float(),
+      totalNumBikes: a.integer(),
+      numFirstBike: a.integer(),
+      numSecondBike: a.integer(),
+      numThirdPlusBike: a.integer(),
+      numBroken: a.integer(),
+      numSold: a.integer(),
+      avgOwnership: a.float(),
+    }),
+
+    modelStats: a
+    .model({
+      modelName: a.string(),
+      brandName: a.string(),
+      avgSatisScore: a.float(),
+      totalNumBikes: a.integer(),
+      numFirstBike: a.integer(),
+      numSecondBike: a.integer(),
+      numThirdPlusBike: a.integer(),
+      numBroken: a.integer(),
+      numSold: a.integer(),
+      avgOwnership: a.float(),
+    }),
+
+    bikeStats: a
+    .model({
+      modelName: a.string(),
+      bikeYear: a.integer(),
+      bikeNum: a.integer(),
+    }),
+
+    totalStats: a
+    .model({
+      totalAvgSatisScore: a.float(),
+      totalNumBikes: a.integer(),
+      totalNumFirst: a.integer(),
+      totalNumSecond: a.integer(),
+      totalNumThird: a.integer(),
+      totalNumBroken: a.integer(),
+      totalNumSold: a.integer(),
+      totalAvgOwnership: a.float(),
+    }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
