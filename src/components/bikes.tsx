@@ -7,19 +7,13 @@ import { Link } from 'react-router-dom';
 import {modelStats} from './interfaces'
 
 // Define the types for bikeModels and other state
-interface BikeModel {
-  modelName?: string;
-  [key: string]: any; // Allow for additional properties
-}
+
 
 export default function Bikes() {
+  
   const [bikeModels, setBikeModels] = useState<modelStats[]>([]); // State with an array of BikeModel
   const [update, setUpdate] = useState<boolean>(false); // State to control the update flag
 
-  // Sync the DataStore once when the component is rendered
-  useEffect(() => {
-    DBWork.syncDataStore();
-  }, []);
 
   useEffect(() => {
     DBWork.fetchBikeModels(setBikeModels);

@@ -10,35 +10,18 @@ import {
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
-import "./Login.css";
+import "./profile.css";
 import { DataStore } from "@aws-amplify/datastore";
 import * as DBWork from "./DBWork";
 import outputs from '../../amplify_outputs.json';
+import {UserProfile, Bike} from './interfaces'
+import client from './client'
 
-Amplify.configure(outputs);
 
 
-
-// Define types for user profile and bike objects
-interface UserProfile {
-  id?: string;
-  email?: string;
-}
-
-interface Bike {
-  id?: string;
-  bikeNumber: number;
-  brand: string;
-  model: string;
-  year: number;
-  sold: boolean;
-  broken: boolean;
-  ownershipMonths: number;
-  score: number;
-  userId: string;
-}
 
 export default function Login() {
+  const { user } = useAuthenticator();
   // State declarations with types
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
   const [localUserProfiles, setLocalUserProfiles] = useState<UserProfile[]>([]);
@@ -148,15 +131,13 @@ export default function Login() {
     setUpdatePage(!update);
   };
 
-  // Sync DataStore
-  DBWork.syncDataStore();
 
   // Queries to the database
   useEffect(() => {
     const interval = setInterval(() => {
-      DBWork.fetchUserProfile(setUserProfiles, setLocalUserProfiles);
+      DBWork.fetchUserProfile(user, setUserProfiles, setLocalUserProfiles);
       console.log("local" + localUserProfiles);
-      DBWork.fetchUserBikes(setUserBikes, localUserProfiles, update, setUpdatePage);
+      DBWork.fetchUserBikes( setUserBikes, localUserProfiles, update, setUpdatePage);
 
       if (userBikes.length > 0) {
         clearInterval(interval);
@@ -279,7 +260,7 @@ export default function Login() {
         {userProfiles.map((userProfile) => (
           <Flex key={userProfile.id} direction="column" justifyContent="center" alignItems="center" gap="2rem" border="1px solid #ccc" padding="2rem" borderRadius="5%" className="box">
             <View>
-              <Heading level={3}>{userProfile.email}</Heading>
+              <Heading level={3}>{userProfile.id}</Heading>
               <View>{displayUserBikes()}</View>
               <View>{addingNewBike ? displayNewBikeInputForm() : <Button onClick={handleAddBike}>Add Bike</Button>}</View>
             </View>

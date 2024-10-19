@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // Import CSS for styling
+import './navbar.css'; // Import CSS for styling
 
 // Define the NavBar component with TypeScript
-const NavBar: React.FC = () => {
+export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="container">
@@ -24,4 +24,4 @@ const NavBar: React.FC = () => {
   );
 };
 
-export default NavBar;
+

@@ -7,30 +7,32 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
+
+  Bike: a
+  .model({
+    bikeNumber: a.integer(),
+    brand: a.string(),
+    model: a.string(),
+    year: a.integer(),
+    sold: a.boolean(),
+    broken: a.boolean(),
+    ownershipMonths: a.integer(),
+    score: a.float(),
+    userId: a.id(),
+    owner: a.belongsTo("User","userId")
+  }).authorization((allow) => [allow.owner()]),
+  
   Todo: a
     .model({
       content: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
 
-  Bike: a
-    .model({
-      bikeNumber: a.integer(),
-      brand: a.string(),
-      model: a.string(),
-      year: a.integer(),
-      sold: a.boolean(),
-      broken: a.boolean(),
-      ownershipMonths: a.integer(),
-      score: a.float(),
-      userId: a.id(),
-      owner: a.belongsTo("User","userId")
-    }),
   User: a
     .model({
       userIdAMP: a.string(),
       bikesOwned: a.hasMany("Bike", "userId"),
-    }),
+    }).authorization((allow) => [allow.owner()]),
 
   BrandStats: a
     .model({
@@ -43,7 +45,7 @@ const schema = a.schema({
       numBroken: a.integer(),
       numSold: a.integer(),
       avgOwnership: a.float(),
-    }),
+    }).authorization((allow) => [allow.owner()]),
 
     modelStats: a
     .model({
@@ -57,14 +59,14 @@ const schema = a.schema({
       numBroken: a.integer(),
       numSold: a.integer(),
       avgOwnership: a.float(),
-    }),
+    }).authorization((allow) => [allow.owner()]),
 
     bikeStats: a
     .model({
       modelName: a.string(),
       bikeYear: a.integer(),
       bikeNum: a.integer(),
-    }),
+    }).authorization((allow) => [allow.owner()]),
 
     totalStats: a
     .model({
@@ -76,7 +78,7 @@ const schema = a.schema({
       totalNumBroken: a.integer(),
       totalNumSold: a.integer(),
       totalAvgOwnership: a.float(),
-    }),
+    }).authorization((allow) => [allow.owner()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
